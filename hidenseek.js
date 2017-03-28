@@ -57,7 +57,7 @@ const hide = (way, PokemonList) => {
 				console.log('Покемон ${textPoc} спрятан в файле ${way} /pockemon.txt'); 
 		}); 
 	} 
-	cb(pokemonList);
+	callback(pokemonList);
 } 
 
 /* 
@@ -76,7 +76,7 @@ const seek = (way) => {
 			let pokemonArray = list.split(", "); 
 			pokemonList.add(pokemonArray[0], pokemonArray[1]); 
 		} 
-	cb(pokemonList); 
+	callback(pokemonList); 
 	}); 
 } 
 
