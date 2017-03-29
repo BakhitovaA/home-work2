@@ -20,7 +20,7 @@ Cоздать 10 папок с именами 01, 02 и так далее.
 
 */ 
 
-const hide = (way, PokemonList) => { 
+const hide = (way, PokemonList, callback) => { 
 
 	if (PokemonList.length <= 3) { 
 		let number = random(1, PokemonList.length); 
@@ -66,7 +66,7 @@ const hide = (way, PokemonList) => {
 Функция должна быть ассинхронной. Использование колбэка или промиса на ваше усмотрение. 
 */ 
 
-const seek = (way) => { 
+const seek = (way, callback) => { 
 	const pokemonList = new PokemonList(); 
 	var count = 0; 
 	fs.readFile(way + '/pockemon.txt', 'utf8', (err, list) => { 
