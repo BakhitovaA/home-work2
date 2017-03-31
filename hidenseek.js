@@ -6,9 +6,7 @@ const Pokemon = require('./pokemon');
 const PokemonList = require('./pokemonList'); 
 
 /* 
-
 Принимает в качестве аргументов путь и PokemonList. Функция должна «спрятать» в папке, указанной в первом аргументе, случайное число покемонов из списка во втором аргументе. 
-
 Не более 3. 
 И не более чем передано. 
 Покемоны должны быть выбраны из списка случайным образом. 
@@ -17,7 +15,6 @@ Cоздать 10 папок с именами 01, 02 и так далее.
 Записать информацию о спрятанном покемоне в файл в формате Charmander|300 
 Вернуть список спрятанных покемонов. 
 Функция должна быть ассинхронной. Использование колбэка или промиса на ваше усмотрение. 
-
 */ 
 
 const hide = (way, PokemonList, callback) => { 
@@ -39,25 +36,28 @@ const hide = (way, PokemonList, callback) => {
 		let name1 = (i == 10) ? way + i : way + '0' + i; //Cоздать 10 папок с именами 01, 02 и так далее. 
 		fs.mkdir(name1, err => { 
 			if (err) throw err; 
-				console.log('Папка ${name1} создана'); 
-			} 
+			console.log('Папка ${name1} создана'); 
 			if (i % 2) { //В некоторых из них создать файл pokemon.txt. В папке должен быть только один такой файл. 
 				let name2 = name1 + './pokemon.txt'; 
 				fs.mkdir(name2, err => { 
 					if (err) throw err; 
 					console.log('Файл pokemon.txt в папке ${name1} создан'); 
 				} 
-			} 
-		} 
+			}
+		})			
+	} 
 
-	for (let i = 0; i < number; ++i) { 
+	
+	for (let i = 0; i < number; i++) { 
 		let textPoc = hidePockemons[i].getName + '|' + hidePockemons[i].getLevel; 
 		fs.writeFile(way + '/pockemon.txt', textPoc, err => { 
 			if (err) throw err; 
-				console.log('Покемон ${textPoc} спрятан в файле ${way} /pockemon.txt'); 
-		}); 
-	} 
-	callback(pokemonList);
+			console.log('Покемон ${textPoc} спрятан в файле ${way} /pockemon.txt'); 
+			if (i == (number - 1)) {
+				callback(hidePockemons);
+			}
+		});
+	}	
 } 
 
 /* 
