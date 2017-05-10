@@ -2,22 +2,14 @@
 
 class Pokemon {
 
-  constructor(name, level) {
-    this.name = name;
-	this.level = level;
-  }
-
-  show() {
-    console.log(this.name + ' ' + this.level);
-  }
-    
-    get getName (){
-		return this.name;
+	constructor(name, level) {
+		this.name = name;
+		this.level = level;
 	}
-    
-	get getLevel (){
+
+	valueOf() {
 		return this.level;
-	}  
+	}
 }
 
 module.exports = Pokemon;
