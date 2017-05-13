@@ -25,26 +25,29 @@ const random = (min, max) => {
 };
 
 const hide = (way, PokemonList, callback) => { 
-
+		
 	if (PokemonList.length <= 3) { 
 		var number = random(1, PokemonList.length); 
+		PokemonList.sort(() => Math.random());
+		PokemonList.splice(number, PokemonList.length - number);
 	} else { 
 		var number = random(1, 3); 
+		PokemonList.sort(() => Math.random());
+		PokemonList.splice(number, PokemonList.length - number);
 	} 
 
 	var hidePockemons = []; //выбираем любой элемент массива PokemonList и записываем в новый массив 
-	for (let i = 0; i < number; i++) { 
-		var rand = Math.floor(Math.random() * PokemonList.length); 
-		hidePockemons[i] = PokemonList[rand]; 
+	for (let i = 0; i < PokemonList.length; i++) { 
+		hidePockemons[i] = PokemonList[i]; 
 		console.log(hidePockemons[i]); 
-	} 
+	}
 
+	var count = 0;
 	for (let i = 1; i <= 10; i++) { 
-		let name = (i == 10) ? way + '/' + i : way + '/0' + i; //Cоздать 10 папок с именами 01, 02 и так далее. 
+		let name = (i == 10) ? way + i : way + '0' + i; //Cоздать 10 папок с именами 01, 02 и так далее. 
 		fs.mkdir(name, err => { 
 			if (err) throw err; 
 			console.log('Папка ' + name + ' создана'); 
-			var count = 0;
 			if (hidePockemons[i-1] instanceof Pokemon) {
 				let textPoc = hidePockemons[i-1].name + '|' + hidePockemons[i-1].level;
 				fs.writeFile(name + '/pokemon.txt', textPoc, err => {
@@ -73,11 +76,10 @@ const seek = (way, callback) => {
 	var count = 0;
 	for (let i = 1; i <= 10; i++) {
         let name = (i == 10) ? way + i : way + '0' + i;
-		fs.readFile(name + '/pokemon.txt', 'utf8', (err, list) => { 
+		fs.readFile(name + '/pokemon.txt', 'utf8', (err, textPoc) => { 
 			if (!err) { 
-				let pokemonArray = list.split(", "); 
+				let pokemonArray = textPoc.split("|"); 
 				pokemonList.add(pokemonArray[0], pokemonArray[1]); 
-				console.log(list);
 			} 
 			count++;
             if (count == 10) {
