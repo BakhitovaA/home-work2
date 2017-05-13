@@ -32,7 +32,7 @@ const hide = (way, PokemonList, callback) => {
 		PokemonList.splice(number, PokemonList.length - number);
 	} else { 
 		var number = random(1, 3); 
-		PokemonList.sort(() => Math.random() );
+		PokemonList.sort(() => Math.random());
 		PokemonList.splice(number, PokemonList.length - number);
 	} 
 
