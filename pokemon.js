@@ -7,6 +7,10 @@ class Pokemon {
 		this.level = level;
 	}
 
+	show(){
+		console.log (`Имя: ${this.name}, уровень: ${this.level}`);
+	}
+	
 	valueOf() {
 		return this.level;
 	}
