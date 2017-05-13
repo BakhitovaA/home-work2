@@ -25,7 +25,7 @@ const random = (min, max) => {
 };
 
 const hide = (way, PokemonList, callback) => { 
-		
+	//берем случайное число покемонов: Не более 3. И не более чем передано. 
 	if (PokemonList.length <= 3) { 
 		var number = random(1, PokemonList.length); 
 		PokemonList.sort(() => Math.random());
@@ -36,7 +36,8 @@ const hide = (way, PokemonList, callback) => {
 		PokemonList.splice(number, PokemonList.length - number);
 	} 
 
-	var hidePockemons = []; //выбираем любой элемент массива PokemonList и записываем в новый массив 
+	//выбираем любой элемент массива PokemonList и записываем в новый массив
+	var hidePockemons = [];  
 	for (let i = 0; i < PokemonList.length; i++) { 
 		hidePockemons[i] = PokemonList[i]; 
 		console.log(hidePockemons[i]); 
