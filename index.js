@@ -23,18 +23,29 @@ if (process.argv[2] === "hide") {
             if (err) {
                 throw (err);
             }
-            hidenseek.hide(path, list, result => {})
+            hidenseek.hide(path, list, result => {
+				console.log ('Список спрятанных покемонов:')
+				result.show();
+				console.log ('Всего спрятано покемонов: ' + result.length);
+			})
         });
     }
 }
 
 if (process.argv[2] === "seek") {
     if (!process.argv[3]) {
-        console.log ("Повторите ввод");
+        console.log ('Повторите ввод');
     } else {
         const path = process.argv[3];
         hidenseek.seek(path, result => {
-			console.log ("Всего найденных покемонов: " + result.length);
+			result.show();
+			console.log ('Всего найденных покемонов: ' + result.length);
 		});
     }
+}
+
+if (!process.argv[2]){
+    console.log ('Команды:');
+    console.log ('1. hide ./field/ ./pokemons.json');
+    console.log ('2. seek ./field/');
 }
