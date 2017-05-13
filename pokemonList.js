@@ -7,6 +7,12 @@ class PokemonList extends Array {
 		let newPokemon = new Pokemon (name, level);
 		this.push(newPokemon);
 	}
+	
+	show(){
+		for (let pokemon of this) {
+			pokemon.show();
+		}
+	}
 }
 
 module.exports = PokemonList;
