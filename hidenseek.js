@@ -5,16 +5,19 @@ const conf = { encoding: 'utf8' };
 const Pokemon = require('./pokemon'); 
 const PokemonList = require('./pokemonList'); 
 
-/* Функция hide принимает в качестве аргументов путь и PokemonList. Функция прячет в папке, указанной в первом аргументе, 
-случайное число покемонов из списка во втором аргументе.
-*/
+const random = (min, max) => {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	max = Math.floor(Math.random() * (max - min + 1));
+	return max + min;
+};
 
 const hide = (way, PokemonList, callback) => { 
 	//Подготавливаем список покемонов перед тем, как спрятать, в соответствии с условиями
 	PokemonList = preparePokemonListBeforeHiding(PokemonList); 
 	
 	//Cоздаем 10 папок с именами 01, 02 и так далее.
-	let amountCreateFolder = 0; //Счетчик количества созданных папок	
+	var amountCreateFolder = 0; //Счетчик количества созданных папок	
 	for (let i = 1; i <= 10; i++) {
 		let nameFolder = (i == 10) ? way + i : way + '0' + i; 
 		fs.mkdir(nameFolder, err => { 
@@ -29,44 +32,29 @@ const hide = (way, PokemonList, callback) => {
 	} 	
 }
 
-const random = (min, max) => {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	max = Math.floor(Math.random() * (max - min + 1));
-	return max + min;
-};
-
 const preparePokemonListBeforeHiding = (PokemonList) => {
     //Берем случайное число покемонов: Не более 3. И не более чем передано. 
-	var randomNumberOfPokemons = 3 //random(1, 3); 
+	var randomNumberOfPokemons = random(1, 3); 
 	PokemonList.sort(() => Math.random());
 	PokemonList.splice(randomNumberOfPokemons, PokemonList.length - randomNumberOfPokemons); 
     return PokemonList;
 }
 
 const hidingPokemonsInFolder = (way, PokemonList, callback) => {
-	let amountHidePokemons = 0; //Счетчик количества спрятанных покемонов	
+	var amountHidePokemons = 0; //Счетчик количества спрятанных покемонов	
 	for (let i = 0; i < PokemonList.length; i++) {
-		//Задаем формат вывода информации о покемоне
-		let informationAboutHidePokemon = PokemonList[i].name + '|' + PokemonList[i].level;
 		//Выбираем случайную папку
 		let numberRandomFolder = random (1, 10);
 		let nameRandomFolder = (numberRandomFolder == 10) ? way + numberRandomFolder : way + '0' + numberRandomFolder; 
-		
-		//Проверяем нет ли уже созданного файла pokemon.txt в выбранной папке
-		fs.access(nameRandomFolder + '/pokemon.txt', fs.F_OK, (err) => {
-			while (!err) { //если файл существует, меняем номер папки до тех пор, пока не найдем пустую папку
-				numberRandomFolder = random (1, 10);
-				nameRandomFolder = (numberRandomFolder == 10) ? way + numberRandomFolder : way + '0' + numberRandomFolder; 
+		//Задаем формат вывода информации о покемоне
+		let informationAboutHidePokemon = PokemonList[i].name + '|' + PokemonList[i].level;
+		//Создаем файл pokemon.txt в папке, в который записываем информацию о покемоне
+		fs.writeFile(nameRandomFolder + '/pokemon.txt', informationAboutHidePokemon, err => {
+			if (err) throw err; 
+			amountHidePokemons++; 
+			if (amountHidePokemons == PokemonList.length) {
+				callback(PokemonList);
 			}
-			//Создаем файл pokemon.txt в папке, в который записываем информацию о покемоне
-			fs.writeFile(nameRandomFolder + '/pokemon.txt', informationAboutHidePokemon, err => {
-				if (err) throw err; 
-				amountHidePokemons++; 
-				if (amountHidePokemons == PokemonList.length) {
-					callback(PokemonList);
-				}
-			}); 
 		});
 	}
 }
