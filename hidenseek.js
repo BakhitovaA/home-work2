@@ -13,10 +13,10 @@ const random = (min, max) => {
 };
 
 const preparePokemonListBeforeHiding = (PokemonList) => {
-   	 //Берем случайное число покемонов: Не более 3. И не более чем передано. 
-	var number = random(1, 3); 
+   	//Берем случайное число покемонов: Не более 3. И не более чем передано. 
+	var randomNumberOfPokemons = random(1, 3); 
 	PokemonList.sort(() => Math.random());
-	PokemonList.splice(number, PokemonList.length - number); 
+	PokemonList.splice(randomNumberOfPokemons, PokemonList.length - randomNumberOfPokemons); 
 	
     	return PokemonList;
 }
