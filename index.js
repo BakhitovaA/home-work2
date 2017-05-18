@@ -38,6 +38,7 @@ if (process.argv[2] === "seek") {
     } else {
         const path = process.argv[3];
         hidenseek.seek(path, result => {
+			console.log ('Список найденных покемонов:')
 			result.show();
 			console.log ('Всего найденных покемонов: ' + result.length);
 		});
