@@ -24,39 +24,35 @@ const random = (min, max) => {
 	return max + min;
 };
 
+const preparePokemonListBeforeHiding = (PokemonList) => {
+	
+    //Берем случайное число покемонов: Не более 3. И не более чем передано. 
+	var number = random(1, 3); 
+	PokemonList.sort(() => Math.random());
+	PokemonList.splice(number, PokemonList.length - number); 
+	
+    return PokemonList;
+}
+
 const hide = (way, PokemonList, callback) => { 
-	//берем случайное число покемонов: Не более 3. И не более чем передано. 
-	if (PokemonList.length <= 3) { 
-		var number = random(1, PokemonList.length); 
-		PokemonList.sort(() => Math.random());
-		PokemonList.splice(number, PokemonList.length - number);
-	} else { 
-		var number = random(1, 3); 
-		PokemonList.sort(() => Math.random());
-		PokemonList.splice(number, PokemonList.length - number);
-	} 
-
-	//выбираем любой элемент массива PokemonList и записываем в новый массив
-	var hidePockemons = [];  
-	for (let i = 0; i < PokemonList.length; i++) { 
-		hidePockemons[i] = PokemonList[i]; 
-		console.log(hidePockemons[i]); 
-	}
-
-	var count = 0;
-	for (let i = 1; i <= 10; i++) { 
-		let name = (i == 10) ? way + i : way + '0' + i; //Cоздать 10 папок с именами 01, 02 и так далее. 
-		fs.mkdir(name, err => { 
+	
+	//Подготавливаем список покемонов перед тем, как спрятать, в соответствии с условиями
+	PokemonList = preparePokemonListBeforeHiding(PokemonList); 
+	
+	var amountHidePokemons = 0; //Счетчик количества спрятанных покемонов
+	//Cоздаем 10 папок с именами 01, 02 и так далее. 
+	for (let i = 1; i <= 10; i++) {
+		let nameFolder = (i == 10) ? way + '/' + i : way + '/0' + i; 
+		fs.mkdir(nameFolder, err => { 
 			if (err) throw err; 
-			console.log('Папка ' + name + ' создана'); 
-			if (hidePockemons[i-1] instanceof Pokemon) {
-				let textPoc = hidePockemons[i-1].name + '|' + hidePockemons[i-1].level;
-				fs.writeFile(name + '/pokemon.txt', textPoc, err => {
+			//Прячем в четные папки покемонов из подготовленного PokemonList в формате name|level
+			if ((i % 2 == 0) && (PokemonList[(i/2)-1] instanceof Pokemon)) {
+				let informationAboutHidePokemon = PokemonList[(i/2)-1].name + '|' + PokemonList[(i/2)-1].level;
+				fs.writeFile(nameFolder + '/pokemon.txt', informationAboutHidePokemon, err => {
 					if (err) throw err; 
-					console.log('Файл pokemon.txt в папке ' + name + ' создан'); 
-					count++;
-					console.log('Покемон ' + textPoc + ' спрятан в файле ' + name + '/pokemon.txt'); 
-					if (count == hidePockemons.length) {
+					amountHidePokemons++; 
+					//Когда все покемоны из PokemonList спрятаны, срабатывает callback
+					if (amountHidePokemons == PokemonList.length) {
 						callback(PokemonList);
 					}
 				});
@@ -74,16 +70,16 @@ const hide = (way, PokemonList, callback) => {
 
 const seek = (way, callback) => { 
 	const pokemonList = new PokemonList();
-	var count = 0;
+	var amountScannedFolders = 0;
 	for (let i = 1; i <= 10; i++) {
-        let name = (i == 10) ? way + i : way + '0' + i;
-		fs.readFile(name + '/pokemon.txt', 'utf8', (err, textPoc) => { 
+        let name = (i == 10) ? way + '/' + i : way + '/0' + i;
+		fs.readFile(name + '/pokemon.txt', 'utf8', (err, informationAboutHidePokemon) => { 
 			if (!err) { 
-				let pokemonArray = textPoc.split("|"); 
+				let pokemonArray = informationAboutHidePokemon.split("|"); 
 				pokemonList.add(pokemonArray[0], pokemonArray[1]); 
 			} 
-			count++;
-            if (count == 10) {
+			amountScannedFolders++;
+            if (amountScannedFolders == 10) {
                 callback(pokemonList);
             }
 		});
