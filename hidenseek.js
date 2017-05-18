@@ -20,9 +20,11 @@ const preparePokemonListBeforeHiding = (PokemonList) => {
 	
     	return PokemonList;
 }
-/* Функция hide принимает в качестве аргументов путь и PokemonList. Функция должна «спрятать» в папке, указанной в первом аргументе, 
+
+/* Функция hide принимает в качестве аргументов путь и PokemonList. Функция прячет в папке, указанной в первом аргументе, 
 случайное число покемонов из списка во втором аргументе.
 */
+
 const hide = (way, PokemonList, callback) => { 
 	
 	PokemonList = preparePokemonListBeforeHiding(PokemonList); //Подготавливаем список покемонов перед тем, как их прятать
